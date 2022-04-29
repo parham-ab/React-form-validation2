@@ -7,7 +7,68 @@
   box-sizing: border-box;
   outline: none;
   text-decoration: none;
+  font-family: "Quicksand", sans-serif;
+  font-family: "Rubik", sans-s;
 }
+// fonts
+@import url("https://fonts.googleapis.com/css2?family=Quicksand&family=Rubik:ital,wght@0,300;1,300&display=swap");
 // Styles
 @import "singnin";
 @import "login";
+@import "validationError";
+// inputs
+.customField {
+  width: 300px;
+  padding: 5px;
+  border: none;
+  border-bottom: solid 1px #0356bd;
+  font-size: 18px;
+  background-color: inherit;
+}
+.title {
+  color: #0356bd;
+  margin-bottom: 2rem;
+}
+.switch {
+  display: flex;
+  justify-content: center;
+  margin-top: 5px;
+  opacity: 0.8;
+  p {
+    font-size: 0.9rem;
+    font-weight: bold;
+  }
+  a {
+    color: #0356bd;
+  }
+}
+.field-container {
+  margin: 0 0 15px 0;
+}
+button {
+  width: 100%;
+  border: none;
+  padding: 5px;
+  border-radius: 7px;
+  background-color: #004ba0;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 17px;
+  &:hover {
+    background-color: #0060ce;
+    transition: all 0.3s;
+  }
+  &:active {
+    background-color: #004ba0;
+    transition: all 0.3s;
+  }
+}
+.wave {
+  img {
+    bottom: 0 !important;
+    position: fixed;
+    z-index: -999;
+    width: 100%;
+  }
+}
