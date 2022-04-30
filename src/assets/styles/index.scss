@@ -13,7 +13,7 @@
 // fonts
 @import url("https://fonts.googleapis.com/css2?family=Quicksand&family=Rubik:ital,wght@0,300;1,300&display=swap");
 // Styles
-@import "singnin";
+@import "signUp";
 @import "login";
 @import "validationError";
 // inputs
@@ -45,7 +45,7 @@
 .field-container {
   margin: 0 0 15px 0;
 }
-button {
+.submitBtn {
   width: 100%;
   border: none;
   padding: 5px;

@@ -26,58 +26,58 @@ const LogIn = () => {
   }, [data]);
 
   return (
-    <div className="signin-container">
+    <div className="signUp-container">
       <div className="svg-icon">
         <img width={"600px"} src={pic} alt="pic" />
       </div>
 
       <div className="container">
-        <div>
-          <Formik
-            initialValues={SignInInitialValues}
-            validationSchema={validationSchema}
-            onSubmit={(values) => setData(values)}
-          >
-            <Form>
+        <Formik
+          initialValues={SignInInitialValues}
+          validationSchema={validationSchema}
+          onSubmit={(values) => setData(values)}
+        >
+          <Form>
+            <div>
+              <h1 className="title">Login</h1>
+            </div>
+
+            <div className="field-container">
               <div>
-                <h1 className="title">Login</h1>
+                <label htmlFor="email">Email</label>
               </div>
+              <Field
+                className="customField"
+                type="email"
+                name="email"
+                id="email"
+              />
+              <ErrorMessage name="email" component={ValidationError} />
+            </div>
 
-              <div className="field-container">
-                <div>
-                  <label htmlFor="email">Email</label>
-                </div>
-                <Field
-                  className="customField"
-                  type="email"
-                  name="email"
-                  id="email"
-                />
-                <ErrorMessage name="email" component={ValidationError} />
+            <div className="field-container">
+              <div>
+                <label htmlFor="password">Password</label>
               </div>
+              <Field
+                className="customField"
+                type="password"
+                name="password"
+                id="password"
+              />
+              <ErrorMessage name="password" component={ValidationError} />
+            </div>
 
-              <div className="field-container">
-                <div>
-                  <label htmlFor="password">Password</label>
-                </div>
-                <Field
-                  className="customField"
-                  type="password"
-                  name="password"
-                  id="password"
-                />
-                <ErrorMessage name="password" component={ValidationError} />
-              </div>
-
-              <button type="submit">Login</button>
-              <div className="switch">
-                <p>
-                  Dont have an account ? <Link to="/">SignIn</Link>
-                </p>
-              </div>
-            </Form>
-          </Formik>
-        </div>
+            <button className="submitBtn" type="submit">
+              Login
+            </button>
+            <div className="switch">
+              <p>
+                Dont have an account ? <Link to="/">SignUp</Link>
+              </p>
+            </div>
+          </Form>
+        </Formik>
       </div>
     </div>
   );

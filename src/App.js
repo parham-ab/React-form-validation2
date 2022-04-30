@@ -3,14 +3,14 @@ import { Navigate, Route, Routes } from "react-router-dom";
 
 // components
 import LogIn from "./components/LogIn";
-import SignIn from "./components/SignIn";
+import SignUp from "./components/SignUp";
 import Wave from "./components/Wave";
 
 const App = () => {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<SignIn />} />
+        <Route path="/" element={<SignUp />} />
         <Route path="/login" element={<LogIn />} />
         <Route path="/*" element={<Navigate to="/" />} />
       </Routes>
