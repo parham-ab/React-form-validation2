@@ -72,3 +72,49 @@
     width: 100%;
   }
 }
+.container {
+  label {
+    cursor: pointer;
+  }
+  background-color: #d3d3d37a;
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 10px 29px 0 #64646f33;
+  input[type="checkbox"] {
+    appearance: none;
+    border: 1px solid #004ba0;
+    cursor: pointer;
+    height: 20px;
+    transition: all 0.1s;
+    width: 20px;
+    border-radius: 5px;
+    &:checked {
+      background-color: #004ba0;
+      border-radius: 100%;
+    }
+  }
+}
+@media screen and(max-width:'545px') {
+  .login-container,
+  .signUp-container {
+    justify-content: center;
+  }
+  .svg-icon {
+    display: none;
+  }
+}
+@media screen and(max-width:'710px') {
+  .svg-icon {
+    img {
+      width: 250px;
+    }
+  }
+  label,
+  button {
+    font-size: 15px !important;
+  }
+  .customField {
+    width: 200px !important;
+  }
+}
