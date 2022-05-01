@@ -118,3 +118,26 @@
     width: 200px !important;
   }
 }
+// dark mode
+.dark {
+  background-color: #262626;
+  min-height: 100vh;
+  .container {
+    background-color: rgb(235 235 235);
+  }
+  .wave {
+    display: none;
+  }
+}
+.darkMode,
+.lightMode {
+  font-size: 2.5rem;
+  margin: 2px 7px;
+  cursor: pointer;
+}
+.darkMode {
+  color: #002881;
+}
+.lightMode {
+  color: #fff;
+}
