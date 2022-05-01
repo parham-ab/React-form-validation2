@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -6,7 +6,6 @@ import axios from "axios";
 // react toastify
 import { ToastContainer } from "react-toastify";
 import { notify } from "../functions/toast";
-import "react-toastify/dist/ReactToastify.css";
 // components
 import ValidationError from "./ValidationError";
 // img
@@ -20,34 +19,31 @@ const SignInInitialValues = {
   regulations: false,
 };
 const validationSchema = Yup.object({
-  name: Yup.string().trim().required("Name Required"),
-  email: Yup.string().email("Invalid email").required("Email Required"),
+  name: Yup.string().trim().required("Name Required !"),
+  email: Yup.string().email("Invalid email").required("Email Required !"),
   password: Yup.string()
     .min(8, "Password must be 8 or mor chars !")
     .matches(/(?=.*[0-9])/, "Password must contain a number.")
-    .required("Password Required"),
+    .required("Password Required !"),
   confirmPassword: Yup.string()
-    .oneOf([Yup.ref("password"), null], "Passwords must match")
+    .oneOf([Yup.ref("password"), null], "Passwords do not match !")
     .required("Confirm Password !"),
   regulations: Yup.boolean().oneOf([true], "Accept Our Regulations !"),
 });
 
 const SignUp = () => {
   const [userData, setUserData] = useState([]);
+  const [vals, setVals] = useState([]);
   const postHandle = () => {
-    // if (Formik.errors) {
-    //   notify("error", "Invalid data !");
-    // }
-    // setUserData(userData);
     axios
-      .post(`https://jsonplaceholder.typicode.com/posts`, { userData })
+      .post(`https://jsonplaceholder.typicode.com/posts`, {
+        userData: vals,
+      })
       .then((response) => {
-        // setUserData(response.data.userData);
-        // console.log(userData);
-        console.log(response.data.userData);
+        setUserData(response.data);
         notify("success", "Signed Up successfully !");
       })
-      .catch((error) => notify("error", "Invalid data !"));
+      .catch((error) => notify("error", "Something went wrong !"));
   };
 
   return (
@@ -63,6 +59,7 @@ const SignUp = () => {
           onSubmit={(values) => setUserData(values)}
         >
           {(Formik) => {
+            setVals(Formik.values);
             return (
               <Form>
                 <div>
@@ -118,6 +115,7 @@ const SignUp = () => {
                     name="confirmPassword"
                     id="confirmPassword"
                   />
+
                   <ErrorMessage
                     name="confirmPassword"
                     component={ValidationError}
@@ -149,7 +147,13 @@ const SignUp = () => {
                 </div>
                 <button
                   className="submitBtn"
-                  disabled={!Formik.isValid}
+                  disabled={
+                    (!Formik.isValid && Object.keys(Formik.errors).length) ||
+                    Formik.values.name === "" ||
+                    Formik.values.email === "" ||
+                    Formik.values.password === "" ||
+                    Formik.values.confirmPassword === ""
+                  }
                   onClick={postHandle}
                   type="submit"
                 >
