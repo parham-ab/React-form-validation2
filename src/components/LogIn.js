@@ -1,35 +1,51 @@
 import { useState } from "react";
+// react router dom
 import { Link } from "react-router-dom";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
+// axios
 import axios from "axios";
+// formik
+import { useFormik } from "formik";
+import * as Yup from "yup";
 // react toastify
 import { ToastContainer } from "react-toastify";
 import { notify } from "../functions/toast";
-// components
-import ValidationError from "./ValidationError";
 // img
 import pic from "../assets/img/pic1.svg";
-// formik settings for SignIn
-const SignInInitialValues = {
-  loginEmail: "",
+// initialValues
+const initialValues = {
+  email: "",
   password: "",
 };
+// validate function
 const validationSchema = Yup.object({
-  loginEmail: Yup.string()
+  email: Yup.string()
     .matches(
       /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,3}$/i,
       "invalid Email address"
     )
     .required("Required"),
-  loginPassword: Yup.string()
+  password: Yup.string()
     .min(8, "Password must be 8 or mor chars !")
     .matches(/(?=.*[0-9])/, "Password must contain a number.")
-    .required("Password Required"),
+    .required("Password Required !"),
 });
 
-const LogIn = () => {
-  const [userDataLogin, setUserDataLogin] = useState([]);
+// submit
+const onSubmit = (values) => {
+  console.log("values", values);
+  axios
+    .post(`https://jsonplaceholder.typicode.com/posts`, {
+      userData: values,
+    })
+    .then((response) => {
+      console.log(response.data);
+      notify("success", "Logged In successfully !");
+    })
+    .catch((error) => notify("error", "Something went wrong !"));
+};
+
+const Login = () => {
+  const [userData, setUserData] = useState([]);
   const [vals, setVals] = useState([]);
   const postHandle = () => {
     axios
@@ -37,11 +53,16 @@ const LogIn = () => {
         userData: vals,
       })
       .then((response) => {
-        setUserDataLogin(response.data);
-        notify("success", "Logged In successfully !");
+        setUserData(response.data);
+        notify("success", "Signed Up successfully !");
       })
       .catch((error) => notify("error", "Something went wrong !"));
   };
+  const formik = useFormik({
+    initialValues,
+    validationSchema,
+    onSubmit,
+  });
 
   return (
     <div className="login-container">
@@ -50,73 +71,60 @@ const LogIn = () => {
       </div>
 
       <div className="container">
-        <Formik
-          initialValues={SignInInitialValues}
-          validationSchema={validationSchema}
-          onSubmit={(values) => setUserDataLogin(values)}
-        >
-          {(Formik) => {
-            setVals(Formik.values);
-            return (
-              <Form>
-                <div>
-                  <h1 className="title">Login</h1>
-                </div>
+        <form onSubmit={formik.handleSubmit}>
+          <div className="field-container">
+            <div>
+              <label htmlFor="email">Email</label>
+            </div>
+            <input
+              className="customField"
+              type="text"
+              id="email"
+              name="email"
+              {...formik.getFieldProps("email")}
+            />
+            <div>
+              <span className="errorMsg">
+                {formik.errors.email &&
+                  formik.touched.email &&
+                  formik.errors.email}
+              </span>
+            </div>
+          </div>
 
-                <div className="field-container">
-                  <div>
-                    <label htmlFor="loginEmail">Email</label>
-                  </div>
-                  <Field
-                    className="customField"
-                    type="email"
-                    name="loginEmail"
-                    id="loginEmail"
-                  />
-                  <ErrorMessage name="loginEmail" component={ValidationError} />
-                </div>
+          <div className="field-container">
+            <div>
+              <label htmlFor="password">Password</label>
+            </div>
+            <input
+              className="customField"
+              type="text"
+              id="password"
+              name="password"
+              {...formik.getFieldProps("password")}
+            />
+            <div>
+              <span className="errorMsg">
+                {formik.errors.password &&
+                  formik.touched.password &&
+                  formik.errors.password}
+              </span>
+            </div>
+          </div>
 
-                <div className="field-container">
-                  <div>
-                    <label htmlFor="loginPassword">Password</label>
-                  </div>
-                  <Field
-                    className="customField"
-                    type="password"
-                    name="loginPassword"
-                    id="loginPassword"
-                  />
-                  <ErrorMessage name="loginPassword" component={ValidationError} />
-                </div>
-
-                <button
-                  className="submitBtn"
-                  disabled={
-                    (!Formik.isValid && Object.keys(Formik.errors).length) ||
-                    Formik.values.name === "" ||
-                    Formik.values.loginEmail === "" ||
-                    Formik.values.password === "" ||
-                    Formik.values.confirmPassword === ""
-                  }
-                  onClick={postHandle}
-                  type="submit"
-                >
-                  Login
-                </button>
-                <div className="switch">
-                  <p>
-                    Dont have an account ? <Link to="/signup">SignUp</Link>
-                  </p>
-                </div>
-              </Form>
-            );
-          }}
-        </Formik>
+          <button className="submitBtn" type="submit">
+            Submit
+          </button>
+          <div className="switch">
+            <p>
+              Dont have an account ? <Link to="/signup">SignUp</Link>
+            </p>
+          </div>
+        </form>
       </div>
-      {/* react toastify component */}
       <ToastContainer />
     </div>
   );
 };
 
-export default LogIn;
+export default Login;
