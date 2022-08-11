@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -108,8 +108,8 @@ const LogIn = () => {
           }}
         </Formik>
       </div>
-        {/* react toastify component */}
-        <ToastContainer />
+      {/* react toastify component */}
+      <ToastContainer />
     </div>
   );
 };

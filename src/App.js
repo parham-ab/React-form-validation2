@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 // icons
 import { MdDarkMode, MdLightMode } from "react-icons/md";
@@ -11,13 +11,13 @@ const App = () => {
   const [darkMode, setDarkMode] = useState(false);
 
   return (
-    <div className={darkMode && "dark"}>
+    <div className={darkMode ? `dark` : undefined}>
       <div>
         <span onClick={() => setDarkMode(!darkMode)}>
-          {!darkMode ? (
-            <MdDarkMode className="darkMode" />
+          {darkMode ? (
+            <MdLightMode className={`lightMode`} />
           ) : (
-            <MdLightMode className="lightMode" />
+            <MdDarkMode className={`darkMode`} />
           )}
         </span>
       </div>

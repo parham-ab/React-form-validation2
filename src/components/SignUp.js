@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -20,7 +20,12 @@ const SignInInitialValues = {
 };
 const validationSchema = Yup.object({
   name: Yup.string().trim().required("Name Required !"),
-  email: Yup.string().email("Invalid email").required("Email Required !"),
+  email: Yup.string()
+    .matches(
+      /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,3}$/i,
+      "invalid Email address"
+    )
+    .required("Required"),
   password: Yup.string()
     .min(8, "Password must be 8 or mor chars !")
     .matches(/(?=.*[0-9])/, "Password must contain a number.")
