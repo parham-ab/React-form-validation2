@@ -1,23 +1,24 @@
-import { useState } from "react";
+// react router dom
 import { Link } from "react-router-dom";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
+// axios
 import axios from "axios";
+// formik
+import { useFormik } from "formik";
+import * as Yup from "yup";
 // react toastify
 import { ToastContainer } from "react-toastify";
 import { notify } from "../functions/toast";
-// components
-import ValidationError from "./ValidationError";
 // img
 import pic from "../assets/img/pic1.svg";
-// formik settings for SignIn
-const SignInInitialValues = {
+// initialValues
+const initialValues = {
   name: "",
   email: "",
   password: "",
   confirmPassword: "",
   regulations: false,
 };
+// validate function
 const validationSchema = Yup.object({
   name: Yup.string().trim().required("Name Required !"),
   email: Yup.string()
@@ -25,7 +26,7 @@ const validationSchema = Yup.object({
       /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,3}$/i,
       "invalid Email address"
     )
-    .required("Required"),
+    .required("Email Required"),
   password: Yup.string()
     .min(8, "Password must be 8 or mor chars !")
     .matches(/(?=.*[0-9])/, "Password must contain a number.")
@@ -35,21 +36,26 @@ const validationSchema = Yup.object({
     .required("Confirm Password !"),
   regulations: Yup.boolean().oneOf([true], "Accept Our Regulations !"),
 });
+// submit
+const onSubmit = (values) => {
+  console.log("values", values);
+  axios
+    .post(`https://jsonplaceholder.typicode.com/posts`, {
+      userData: values,
+    })
+    .then((response) => {
+      console.log(response.data);
+      notify("success", "Signed Up successfully !");
+    })
+    .catch((error) => notify("error", "Something went wrong !"));
+};
 
 const SignUp = () => {
-  const [userData, setUserData] = useState([]);
-  const [vals, setVals] = useState([]);
-  const postHandle = () => {
-    axios
-      .post(`https://jsonplaceholder.typicode.com/posts`, {
-        userData: vals,
-      })
-      .then((response) => {
-        setUserData(response.data);
-        notify("success", "Signed Up successfully !");
-      })
-      .catch((error) => notify("error", "Something went wrong !"));
-  };
+  const formik = useFormik({
+    initialValues,
+    validationSchema,
+    onSubmit,
+  });
 
   return (
     <div className="signUp-container">
@@ -58,123 +64,124 @@ const SignUp = () => {
       </div>
 
       <div className="container">
-        <Formik
-          initialValues={SignInInitialValues}
-          validationSchema={validationSchema}
-          onSubmit={(values) => setUserData(values)}
-        >
-          {(Formik) => {
-            setVals(Formik.values);
-            return (
-              <Form>
-                <div>
-                  <h1 className="title">SignUp</h1>
-                </div>
+        <form onSubmit={formik.handleSubmit}>
+          <div className="field-container">
+            <div>
+              <label htmlFor="name">Name</label>
+            </div>
+            <input
+              className="customField"
+              type="text"
+              id="name"
+              name="name"
+              {...formik.getFieldProps("name")}
+            />
+            <div>
+              <span className="errorMsg">
+                {formik.errors.name &&
+                  formik.touched.name &&
+                  formik.errors.name}
+              </span>
+            </div>
+          </div>
 
-                <div className="field-container">
-                  <div>
-                    <label htmlFor="name">Name</label>
-                  </div>
-                  <Field
-                    className="customField"
-                    type="text"
-                    name="name"
-                    id="name"
-                  />
-                  <ErrorMessage name="name" component={ValidationError} />
-                </div>
+          <div className="field-container">
+            <div>
+              <label htmlFor="email">Email</label>
+            </div>
+            <input
+              className="customField"
+              type="text"
+              id="email"
+              name="email"
+              {...formik.getFieldProps("email")}
+            />
+            <div>
+              <span className="errorMsg">
+                {formik.errors.email &&
+                  formik.touched.email &&
+                  formik.errors.email}
+              </span>
+            </div>
+          </div>
 
-                <div className="field-container">
-                  <div>
-                    <label htmlFor="email">Email</label>
-                  </div>
-                  <Field
-                    className="customField"
-                    type="email"
-                    name="email"
-                    id="email"
-                  />
-                  <ErrorMessage name="email" component={ValidationError} />
-                </div>
+          <div className="field-container">
+            <div>
+              <label htmlFor="password">Password</label>
+            </div>
+            <input
+              className="customField"
+              type="password"
+              id="password"
+              name="password"
+              {...formik.getFieldProps("password")}
+            />
+            <div>
+              <span className="errorMsg">
+                {formik.errors.password &&
+                  formik.touched.password &&
+                  formik.errors.password}
+              </span>
+            </div>
+          </div>
 
-                <div className="field-container">
-                  <div>
-                    <label htmlFor="password">Password</label>
-                  </div>
-                  <Field
-                    className="customField"
-                    type="password"
-                    name="password"
-                    id="password"
-                  />
-                  <ErrorMessage name="password" component={ValidationError} />
-                </div>
+          <div className="field-container">
+            <div>
+              <label htmlFor="confirmPassword">Confirm Password</label>
+            </div>
+            <input
+              className="customField"
+              type="password"
+              id="confirmPassword"
+              name="confirmPassword"
+              {...formik.getFieldProps("confirmPassword")}
+            />
+            <div>
+              <span className="errorMsg">
+                {formik.errors.confirmPassword &&
+                  formik.touched.confirmPassword &&
+                  formik.errors.confirmPassword}
+              </span>
+            </div>
+          </div>
 
-                <div className="field-container">
-                  <div>
-                    <label htmlFor="confirmPassword">Confirm Password</label>
-                  </div>
-                  <Field
-                    className="customField"
-                    type="password"
-                    name="confirmPassword"
-                    id="confirmPassword"
-                  />
+          <div className="field-container">
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <div>
+                <label htmlFor="regulations">Accept privacy Policy</label>
+              </div>
+              <div>
+                <input
+                  className="customField"
+                  type="checkbox"
+                  id="regulations"
+                  name="regulations"
+                  {...formik.getFieldProps("regulations")}
+                />
+              </div>
+            </div>
+            <span className="errorMsg">
+              {formik.errors.regulations &&
+                formik.touched.regulations &&
+                formik.errors.regulations}
+            </span>
+          </div>
 
-                  <ErrorMessage
-                    name="confirmPassword"
-                    component={ValidationError}
-                  />
-                </div>
-
-                <div className="field-container">
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <div>
-                      <label htmlFor="regulations">Accept privacy Policy</label>
-                    </div>
-                    <div>
-                      <Field
-                        type="checkbox"
-                        name="regulations"
-                        id="regulations"
-                      />
-                    </div>
-                  </div>
-                  <ErrorMessage
-                    name="regulations"
-                    component={ValidationError}
-                  />
-                </div>
-                <button
-                  className="submitBtn"
-                  disabled={
-                    (!Formik.isValid && Object.keys(Formik.errors).length) ||
-                    Formik.values.name === "" ||
-                    Formik.values.email === "" ||
-                    Formik.values.password === "" ||
-                    Formik.values.confirmPassword === ""
-                  }
-                  onClick={postHandle}
-                  type="submit"
-                >
-                  SignUp
-                </button>
-                <div className="switch">
-                  <p>
-                    Have an account already ? <Link to="/login">Login</Link>
-                  </p>
-                </div>
-              </Form>
-            );
-          }}
-        </Formik>
+          <button className="submitBtn" type="submit">
+            Submit
+          </button>
+          <div className="switch">
+            <p>
+              Have an account already ? <Link to="/login">Login</Link>
+            </p>
+          </div>
+        </form>
       </div>
-      {/* react toastify component */}
       <ToastContainer />
     </div>
   );

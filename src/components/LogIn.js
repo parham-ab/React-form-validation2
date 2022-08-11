@@ -1,4 +1,3 @@
-import { useState } from "react";
 // react router dom
 import { Link } from "react-router-dom";
 // axios
@@ -23,13 +22,12 @@ const validationSchema = Yup.object({
       /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,3}$/i,
       "invalid Email address"
     )
-    .required("Required"),
+    .required("Email Required"),
   password: Yup.string()
     .min(8, "Password must be 8 or mor chars !")
     .matches(/(?=.*[0-9])/, "Password must contain a number.")
     .required("Password Required !"),
 });
-
 // submit
 const onSubmit = (values) => {
   console.log("values", values);
@@ -45,19 +43,6 @@ const onSubmit = (values) => {
 };
 
 const Login = () => {
-  const [userData, setUserData] = useState([]);
-  const [vals, setVals] = useState([]);
-  const postHandle = () => {
-    axios
-      .post(`https://jsonplaceholder.typicode.com/posts`, {
-        userData: vals,
-      })
-      .then((response) => {
-        setUserData(response.data);
-        notify("success", "Signed Up successfully !");
-      })
-      .catch((error) => notify("error", "Something went wrong !"));
-  };
   const formik = useFormik({
     initialValues,
     validationSchema,
@@ -98,7 +83,7 @@ const Login = () => {
             </div>
             <input
               className="customField"
-              type="text"
+              type="password"
               id="password"
               name="password"
               {...formik.getFieldProps("password")}
