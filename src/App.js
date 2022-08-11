@@ -22,13 +22,12 @@ const App = () => {
         </span>
       </div>
       <Routes>
-        <Route path="/" element={<SignUp />} />
+        <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<LogIn />} />
-        <Route path="/*" element={<Navigate to="/" />} />
+        <Route path="/*" element={<Navigate to="/signup" />} />
       </Routes>
       <Wave />
     </div>
   );
 };
-
 export default App;

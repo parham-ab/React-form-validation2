@@ -12,12 +12,17 @@ import ValidationError from "./ValidationError";
 import pic from "../assets/img/pic1.svg";
 // formik settings for SignIn
 const SignInInitialValues = {
-  email: "",
+  loginEmail: "",
   password: "",
 };
 const validationSchema = Yup.object({
-  email: Yup.string().email("Invalid email").required("Email Required"),
-  password: Yup.string()
+  loginEmail: Yup.string()
+    .matches(
+      /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,3}$/i,
+      "invalid Email address"
+    )
+    .required("Required"),
+  loginPassword: Yup.string()
     .min(8, "Password must be 8 or mor chars !")
     .matches(/(?=.*[0-9])/, "Password must contain a number.")
     .required("Password Required"),
@@ -60,28 +65,28 @@ const LogIn = () => {
 
                 <div className="field-container">
                   <div>
-                    <label htmlFor="email">Email</label>
+                    <label htmlFor="loginEmail">Email</label>
                   </div>
                   <Field
                     className="customField"
                     type="email"
-                    name="email"
-                    id="email"
+                    name="loginEmail"
+                    id="loginEmail"
                   />
-                  <ErrorMessage name="email" component={ValidationError} />
+                  <ErrorMessage name="loginEmail" component={ValidationError} />
                 </div>
 
                 <div className="field-container">
                   <div>
-                    <label htmlFor="password">Password</label>
+                    <label htmlFor="loginPassword">Password</label>
                   </div>
                   <Field
                     className="customField"
                     type="password"
-                    name="password"
-                    id="password"
+                    name="loginPassword"
+                    id="loginPassword"
                   />
-                  <ErrorMessage name="password" component={ValidationError} />
+                  <ErrorMessage name="loginPassword" component={ValidationError} />
                 </div>
 
                 <button
@@ -89,7 +94,7 @@ const LogIn = () => {
                   disabled={
                     (!Formik.isValid && Object.keys(Formik.errors).length) ||
                     Formik.values.name === "" ||
-                    Formik.values.email === "" ||
+                    Formik.values.loginEmail === "" ||
                     Formik.values.password === "" ||
                     Formik.values.confirmPassword === ""
                   }
@@ -100,7 +105,7 @@ const LogIn = () => {
                 </button>
                 <div className="switch">
                   <p>
-                    Dont have an account ? <Link to="/">SignUp</Link>
+                    Dont have an account ? <Link to="/signup">SignUp</Link>
                   </p>
                 </div>
               </Form>
