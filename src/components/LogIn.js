@@ -56,6 +56,9 @@ const Login = () => {
       </div>
 
       <div className="container">
+        <div>
+          <h1 className="title">Login</h1>
+        </div>
         <form onSubmit={formik.handleSubmit}>
           <div className="field-container">
             <div>
